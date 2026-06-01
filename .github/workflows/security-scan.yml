@@ -1,11 +1,56 @@
-name: Security Scan
+name: Security Scanning
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 0 * * 1"  # Weekly on Monday
 
 jobs:
-  scan:
+  security:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Run Trivy
-      uses: aquasecurity/trivy-action@master
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install bandit safety
+
+      - name: Secret Scanning (pre-commit)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+      - name: SAST with Bandit
+        run: |
+          bandit -r alt_propulsion -f sarif -o bandit.sarif
+        continue-on-error: true
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: bandit.sarif
+        continue-on-error: true
+
+      - name: Dependency Vulnerability Scan with Safety
+        run: |
+          safety check -r requirements.txt --json --output safety-report.json
+        continue-on-error: true
+
+      - name: Upload Safety Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: safety-report
+          path: safety-report.json

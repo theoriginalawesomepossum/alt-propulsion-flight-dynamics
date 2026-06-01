@@ -1,0 +1,5 @@
+[project]
+name = "alt-propulsion-flight-dynamics"
+version = "0.1.0"
+description = "Alternative propulsion flight dynamics simulator"
+requires-python = ">=3.10"

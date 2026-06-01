@@ -1,0 +1,1 @@
+"""Ducted fan propulsion."""

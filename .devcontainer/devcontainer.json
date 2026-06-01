@@ -1,5 +1,51 @@
 {
-  "name": "Alt Propulsion Development",
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "features": {}
+  "name": "Alt-Propulsion Flight Dynamics Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.debugpy",
+        "tamasfe.even-better-toml",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.formatting.provider": "black",
+        "python.sortImports.args": ["--profile", "black"],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "pip install -r requirements.txt && pip install -r requirements-dev.txt",
+  "forwardPorts": [],
+  "secrets": {
+    "PYTEST_COVERAGE_TOKEN": {
+      "description": "Token for coverage reporting (optional)",
+      "documentationUrl": "https://docs.github.com/en/actions/security-guides/encrypted-secrets"
+    }
+  },
+  "remoteUser": "vscode"
 }

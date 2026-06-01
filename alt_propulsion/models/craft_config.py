@@ -1,0 +1,1 @@
+"""Craft configuration data models."""

@@ -527,7 +527,7 @@ class PhysicsEngine:
             structural_margin=structural_margin,
             control_margin=control_margin,
             air_density_kg_m3=air_density,
-            density_altitude_m
+            density_altitude_m,
             test_phase=config.test_phase,
             warnings=warnings,
             recommendations=recommendations,

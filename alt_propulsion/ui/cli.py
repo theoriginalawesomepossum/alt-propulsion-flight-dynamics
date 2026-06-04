@@ -29,15 +29,13 @@ class CLI:
     
     def run_interactive(self):
         """Run interactive mode with menus."""
-        print("
-" + "=" * 70)
+        print("\n" + "=" * 70)
         print("  ALT-PROPULSION FLIGHT DYNAMICS ANALYZER v3.0")
         print("  Engineering-Grade Simulator for Scientists & Engineers")
         print("=" * 70)
         
         # Select mode
-        print("
-Select mode:")
+        print("\nSelect mode:")
         print("  1. Interactive Analysis (custom craft)")
         print("  2. Demo Presets (pre-configured examples)")
         print("  3. Exit")
@@ -58,8 +56,7 @@ Select mode:")
         
         # Ask to continue
         try:
-            again = input("
-Analyze another? (y/n): ").strip().lower()
+            again = input("\nAnalyze another? (y/n): ").strip().lower()
             if again in ('y', 'yes'):
                 self.run()
         except EOFError:
@@ -67,8 +64,7 @@ Analyze another? (y/n): ").strip().lower()
     
     def run_batch(self):
         """Run batch mode (no prompts)."""
-        print("
-" + "=" * 70)
+        print("\n" + "=" * 70)
         print("  ALT-PROPULSION FLIGHT DYNAMICS ANALYZER v3.0")
         print("  Batch Mode (Non-Interactive)")
         print("=" * 70)
@@ -78,8 +74,7 @@ Analyze another? (y/n): ").strip().lower()
     
     def run_custom_craft(self):
         """Run interactive custom craft configuration."""
-        print("
---- Propulsion Type ---")
+        print("\n--- Propulsion Type ---")
         types = list(PropulsionType)
         for i, pt in enumerate(types[:10], 1):  # Show first 10
             print(f"  {i}. {pt.value}")
@@ -94,8 +89,7 @@ Analyze another? (y/n): ").strip().lower()
             prop_type = PropulsionType.VTOL
         
         # Get parameters with defaults
-        print("
---- Physical Parameters ---")
+        print("\n--- Physical Parameters ---")
         try:
             mass = float(input("Craft mass (kg) [1000.0]: ").strip() or "1000")
             thrust = float(input("Total thrust (N) [12000.0]: ").strip() or "12000")
@@ -121,8 +115,7 @@ Analyze another? (y/n): ").strip().lower()
         presets = get_demo_presets()
         
         for name, config in presets:
-            print(f"
-{'─' * 60}")
+            print(f"\n{'─' * 60}")
             print(f"  CONFIG: {name}")
             print(f"  Type: {config.propulsion_type.value}")
             print(f"  Mass: {config.mass_kg} kg | Thrust: {config.thrust_newtons} N")
@@ -134,14 +127,12 @@ Analyze another? (y/n): ").strip().lower()
     
     def display_outcome(self, analysis: FlightAnalysis):
         """Display analysis results."""
-        print("
-" + "=" * 60)
+        print("\n" + "=" * 60)
         print("         FLIGHT DYNAMICS ANALYSIS RESULTS")
         print("=" * 60)
         
         outcome_str = f"{analysis.outcome_emoji} {analysis.outcome.name}"
-        print(f"
-  OUTCOME: {outcome_str}")
+        print(f"\n  OUTCOME: {outcome_str}")
         print(f"  {'─' * 50}")
         
         print(f"  Thrust-to-Weight Ratio:  {analysis.twr:.3f}")
@@ -154,19 +145,16 @@ Analyze another? (y/n): ").strip().lower()
         print(f"  Structural Margin:       {analysis.structural_margin:.1%}")
         
         if analysis.warnings:
-            print(f"
-  ⚠️  WARNINGS:")
+            print(f"\n  ⚠️  WARNINGS:")
             for w in analysis.warnings:
                 print(f"     • {w}")
         
         if analysis.recommendations:
-            print(f"
-  💡 RECOMMENDATIONS:")
+            print(f"\n  💡 RECOMMENDATIONS:")
             for r in analysis.recommendations:
                 print(f"     • {r}")
         
-        print("=" * 60 + "
-")
+        print("=" * 60 + "\n")
 
 
 def main():

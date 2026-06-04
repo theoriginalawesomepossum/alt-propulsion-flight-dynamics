@@ -4,7 +4,7 @@ Demo preset configurations for testing.
 
 from typing import List, Tuple
 from alt_propulsion.models.craft_config import CraftConfig
-from alt_propulsion.models.enums import PropulsionType
+from alt_propulsion.models.enums import PropulsionType, TestPhase
 
 
 def get_demo_presets() -> List[Tuple[str, CraftConfig]]:

@@ -93,10 +93,8 @@ class CraftConfig:
         errors = validator.validate_craft_config(self)
         
         if errors:
-            error_msg = "
-".join(errors)
-            raise ValueError(f"Invalid CraftConfig:
-{error_msg}")
+            error_msg = "\n".join(errors)
+            raise ValueError(f"Invalid CraftConfig:\n{error_msg}")
     
     @property
     def twr(self) -> float:

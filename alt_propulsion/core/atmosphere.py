@@ -72,10 +72,10 @@ class AtmosphereModel:
         if altitude < 11000:  # Troposphere
             temp_ratio = 1 - (self.LAPS_RATE * altitude) / self.T_SEA_LEVEL
             exponent = self.G / (self.R_DRY_AIR * self.LAPS_RATE)
-            return self.P_SEA_LEVEL * (temp_ratio ** exponent)
+            return float(self.P_SEA_LEVEL * (temp_ratio ** exponent))
         else:  # Stratosphere
             pressure_11k = self.pressure(11000)
-            return pressure_11k * math.exp(-(altitude - 11000) / 6384)
+            return float(pressure_11k * math.exp(-(altitude - 11000) / 6384))
     
     def pressure_altitude(self, altitude: float) -> float:
         """
@@ -91,7 +91,7 @@ class AtmosphereModel:
         # In precision applications, this would account for barometric pressure variations
         return altitude
     
-    def air_density_dry(self, altitude: float, temperature_k: float = None) -> float:
+    def air_density_dry(self, altitude: float, temperature_k: Optional[float] = None) -> float:
         """
         Calculate air density for dry air.
         
@@ -153,8 +153,8 @@ class AtmosphereModel:
         return relative_humidity * e_sat
     
     def air_density_humid(self, altitude: float, temperature_k: float,
-                          dew_point_k: float = None,
-                          relative_humidity: float = None) -> float:
+                          dew_point_k: Optional[float] = None,
+                          relative_humidity: Optional[float] = None) -> float:
         """
         Calculate air density including humidity (water vapor).
         
@@ -174,12 +174,12 @@ class AtmosphereModel:
         pressure = self.pressure(altitude)
         
         # Calculate vapor pressure
-        if dew_point_k:
+        if dew_point_k is not None:
             vapor_pressure = self.vapor_pressure_from_dewpoint(dew_point_k)
-        elif relative_humidity:
+        elif relative_humidity is not None:
             vapor_pressure = self.vapor_pressure_from_humidity(temperature_k, relative_humidity)
         else:
-            vapor_pressure = 0  # Dry air
+            vapor_pressure = 0.0  # Dry air
         
         # Partial pressure of dry air
         dry_air_pressure = pressure - vapor_pressure
@@ -190,8 +190,8 @@ class AtmosphereModel:
         
         return density
     
-    def air_density(self, altitude: float, temperature_c: float = None,
-                    dew_point_c: float = None, relative_humidity: float = None,
+    def air_density(self, altitude: float, temperature_c: Optional[float] = None,
+                    dew_point_c: Optional[float] = None, relative_humidity: Optional[float] = None,
                     use_humidity: bool = True) -> float:
         """
         Calculate air density with optional humidity correction.
@@ -214,9 +214,9 @@ class AtmosphereModel:
         else:
             temperature_k = temperature_c + 273.15
         
-        dew_point_k = dew_point_c + 273.15 if dew_point_c else None
+        dew_point_k = dew_point_c + 273.15 if dew_point_c is not None else None
         
-        if use_humidity and (dew_point_k or relative_humidity):
+        if use_humidity and (dew_point_k is not None or relative_humidity is not None):
             return self.air_density_humid(altitude, temperature_k, dew_point_k, relative_humidity)
         else:
             return self.air_density_dry(altitude, temperature_k)
@@ -224,7 +224,7 @@ class AtmosphereModel:
     # ========== DENSITY ALTITUDE ==========
     
     def density_altitude(self, pressure_altitude: float, oat_c: float,
-                         dew_point_c: float = None) -> float:
+                         dew_point_c: Optional[float] = None) -> float:
         """
         Calculate density altitude (pressure altitude corrected for temp + humidity).
         
@@ -249,13 +249,13 @@ class AtmosphereModel:
         temp_correction = 120 * 0.3048 * (oat_c - isa_temp_c)  # Convert ft to m
         
         # Humidity correction
-        humidity_correction = 0
-        if dew_point_c:
+        humidity_correction = 0.0
+        if dew_point_c is not None:
             humidity_correction = (dew_point_c * 2) * 10 * 0.3048  # Convert ft to m
         
         density_alt = pressure_altitude + temp_correction + humidity_correction
         
-        return density_alt
+        return float(density_alt)
     
     # ========== WIND & TURBULENCE ==========
     

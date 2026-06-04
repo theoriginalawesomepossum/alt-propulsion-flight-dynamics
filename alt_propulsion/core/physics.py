@@ -179,7 +179,6 @@ class PhysicsEngine:
             return float('inf')
         
         # Air density at altitude
-        temp_k = config.temperature_c + 273.15 if config.temperature_c else None
         rho = self.atmosphere.air_density(
             config.altitude_m,
             config.temperature_c,
@@ -240,7 +239,7 @@ class PhysicsEngine:
         
         # Ion thruster: works in vacuum (very highaltitude)
         if config.propulsion_type == PropulsionType.ION_THRUSTER:
-            return 100000  # 100 km (edge of space)
+            return 100000.0  # 100 km (edge of space)
         
         # Anti-gravity: unlimited
         if config.propulsion_type == PropulsionType.ANTI_GRAVITY:
@@ -248,7 +247,7 @@ class PhysicsEngine:
         
         # Rocket/jetpack: thrust roughly constant
         if config.propulsion_type == PropulsionType.JETPACK:
-            return 50000  # 50 km
+            return 50000.0  # 50 km
         
         # Propeller-based: thrust ∝ air density
         # TWR_at_alt = TWR_sea × (rho_alt / rho_sea)
@@ -288,7 +287,6 @@ class PhysicsEngine:
         # Rough approximation: climb_rate ≈ excess_twr × characteristic_velocity
         hover_efficiency = self.calculate_hover_efficiency(config)
         
-        temp_k = config.temperature_c + 273.15 if config.temperature_c else None
         rho = self.atmosphere.air_density(config.altitude_m, config.temperature_c)
         
         disk_area = config.base_area_m2
@@ -445,7 +443,6 @@ class PhysicsEngine:
         control_margin = self.calculate_control_margin(config)
         
         # Atmospheric properties
-        temp_k = config.temperature_c + 273.15 if config.temperature_c else None
         air_density = self.atmosphere.air_density(
             config.altitude_m, config.temperature_c,
             config.dew_point_c, config.relative_humidity
